@@ -27,7 +27,7 @@ const SignIn = () => {
             }
           />
           <input
-            type="text"
+            type="password"
             placeholder="********"
             value={form.password}
             onChange={(event) =>
