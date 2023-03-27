@@ -1,15 +1,19 @@
 import { Container } from './styles';
 import Logo from '../../assets/Logo_menor.png';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../../contexts/AuthContext';
+
 const SignUp = () => {
+  const { signUp, loadingAuth } = useContext(AuthContext);
+
   const [form, setForm] = useState({
     email: '',
     password: '',
     name: '',
   });
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (
@@ -17,7 +21,7 @@ const SignUp = () => {
       form.name.trim() !== '' &&
       form.password.trim() !== ''
     ) {
-      alert('logou');
+      await signUp(form.email, form.name, form.password);
     }
   };
 
@@ -53,7 +57,9 @@ const SignUp = () => {
             }
           />
 
-          <button type="submit">Acessar</button>
+          <button type="submit">
+            {loadingAuth ? 'Carregando ...' : 'Cadastrar'}
+          </button>
         </form>
 
         <Link to={'/'}>Já possui uma conta? Faça login</Link>
