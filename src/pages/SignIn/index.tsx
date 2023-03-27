@@ -1,13 +1,24 @@
 import { Container } from './styles';
 
 import Logo from '../../assets/Logo_menor.png';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { AuthContext } from '../../contexts/AuthContext';
 import { Link } from 'react-router-dom';
 const SignIn = () => {
+  const { signIn } = useContext(AuthContext);
+
   const [form, setForm] = useState({
     email: '',
     password: '',
   });
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (form.email.trim() !== '' && form.password.trim() !== '') {
+      signIn(form.email, form.password);
+    }
+  };
 
   return (
     <Container>
@@ -16,7 +27,7 @@ const SignIn = () => {
           <img src={Logo} alt="logo do sistema de chamadas" />
         </div>
 
-        <form>
+        <form onSubmit={(event) => handleSubmit(event)}>
           <h1>Entrar</h1>
           <input
             type="text"

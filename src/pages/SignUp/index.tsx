@@ -1,7 +1,6 @@
 import { Container } from './styles';
-
 import Logo from '../../assets/Logo_menor.png';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 const SignUp = () => {
   const [form, setForm] = useState({
@@ -10,6 +9,18 @@ const SignUp = () => {
     name: '',
   });
 
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (
+      form.email.trim() !== '' &&
+      form.name.trim() !== '' &&
+      form.password.trim() !== ''
+    ) {
+      alert('logou');
+    }
+  };
+
   return (
     <Container>
       <div className="login">
@@ -17,7 +28,7 @@ const SignUp = () => {
           <img src={Logo} alt="logo do sistema de chamadas" />
         </div>
 
-        <form>
+        <form onSubmit={(event) => handleSubmit(event)}>
           <h1>Cadastrar nova conta</h1>
           <input
             type="text"
@@ -26,7 +37,7 @@ const SignUp = () => {
             onChange={(event) => setForm({ ...form, name: event.target.value })}
           />
           <input
-            type="text"
+            type="email"
             placeholder="email@email.com"
             value={form.email}
             onChange={(event) =>
