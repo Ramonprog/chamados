@@ -5,18 +5,18 @@ import { useState, useContext } from 'react';
 import { AuthContext } from '../../contexts/AuthContext';
 import { Link } from 'react-router-dom';
 const SignIn = () => {
-  const { signIn } = useContext(AuthContext);
+  const { signIn, loadingAuth } = useContext(AuthContext);
 
   const [form, setForm] = useState({
     email: '',
     password: '',
   });
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (form.email.trim() !== '' && form.password.trim() !== '') {
-      signIn(form.email, form.password);
+      await signIn(form.email, form.password);
     }
   };
 
@@ -46,7 +46,9 @@ const SignIn = () => {
             }
           />
 
-          <button type="submit">Acessar</button>
+          <button type="submit">
+            {loadingAuth ? 'Carregando...' : 'Acessar'}
+          </button>
         </form>
 
         <Link to={'/register'}>Criar uma conta</Link>

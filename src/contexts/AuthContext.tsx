@@ -5,10 +5,15 @@ import {
   Children,
   ReactComponentElement,
 } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { db, auth } from '../services/firebaseConnection';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { toast } from 'react-toastify';
 
 export const AuthContext = createContext({});
 
@@ -20,9 +25,36 @@ export const AuthContextProvider: React.FC<Props> = ({ children }) => {
   const [user, setUser] = useState<null | {}>({});
   const [loadingAuth, setLoadingAuth] = useState(false);
 
-  const signIn = (email: string, password: string): void => {
-    alert(email);
-    alert(password);
+  const navigate = useNavigate();
+
+  const signIn = async (email: string, password: string) => {
+    setLoadingAuth(true);
+    try {
+      const response = await signInWithEmailAndPassword(auth, email, password);
+      let uid = response.user.uid;
+      const docRef = doc(db, 'users', uid);
+      const docSnap = await getDoc(docRef);
+
+      let data = {
+        uid,
+        name: docSnap.data()?.nome,
+        email: response.user.email,
+        avatarUrl: docSnap.data()?.avatarUrl,
+      };
+
+      setUser(data);
+
+      localStorage.setItem('@user', JSON.stringify(data));
+
+      setLoadingAuth(false);
+
+      toast.success('Bem-vindo(a) de volta');
+      navigate('/dashboard');
+    } catch (error: any) {
+      toast.error('Oops algo deu errado!');
+      console.log(error);
+      setLoadingAuth(false);
+    }
   };
 
   const signUp = async (email: string, name: string, password: string) => {
@@ -48,8 +80,10 @@ export const AuthContextProvider: React.FC<Props> = ({ children }) => {
       };
 
       setUser(data);
-
+      localStorage.setItem('@user', JSON.stringify(data));
       setLoadingAuth(false);
+      toast.success('Seja bem vindo ao sistema');
+      navigate('/dashboard');
     } catch (error: any) {
       console.log(error.message);
       setLoadingAuth(false);
@@ -64,7 +98,6 @@ export const AuthContextProvider: React.FC<Props> = ({ children }) => {
         signIn,
         signUp,
         loadingAuth,
-        setLoadingAuth,
       }}
     >
       {children}
