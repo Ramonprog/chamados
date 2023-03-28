@@ -1,10 +1,18 @@
-import React from 'react';
+import { ReactNode } from 'react';
+import { Container } from './styles';
+type Props = {
+  icon: ReactNode;
+  name: string;
+};
 
-const Title = () => {
+const Title = ({ icon, name }: Props) => {
   return (
-    <div>
-      <h1>title</h1>
-    </div>
+    <Container>
+      <div className="info">
+        <p className="icon">{icon}</p>
+        <span>{name}</span>
+      </div>
+    </Container>
   );
 };
 

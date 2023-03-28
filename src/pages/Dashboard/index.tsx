@@ -12,7 +12,7 @@ const Dashboard = () => {
   return (
     <Container>
       <Header />
-      <h1>dashboard</h1>
+      <h1 className="content">dashboard</h1>
       <button onClick={handleLogout}>sair</button>
     </Container>
   );
