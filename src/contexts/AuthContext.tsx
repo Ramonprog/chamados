@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { db, auth } from '../services/firebaseConnection';
@@ -92,18 +92,19 @@ export const AuthContextProvider: React.FC<Props> = ({ children }) => {
     navigate('/');
   };
 
+  const contextValue = useMemo(
+    () => ({
+      signed: !!user,
+      user,
+      signIn,
+      signUp,
+      loadingAuth,
+      logout,
+    }),
+    [user, signIn, signUp, loadingAuth, logout]
+  );
+
   return (
-    <AuthContext.Provider
-      value={{
-        signed: !!user,
-        user,
-        signIn,
-        signUp,
-        loadingAuth,
-        logout,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
 };
