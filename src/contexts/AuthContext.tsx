@@ -1,16 +1,11 @@
-import {
-  createContext,
-  useState,
-  useEffect,
-  Children,
-  ReactComponentElement,
-} from 'react';
+import { createContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { db, auth } from '../services/firebaseConnection';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signOut,
 } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { toast } from 'react-toastify';
@@ -90,6 +85,13 @@ export const AuthContextProvider: React.FC<Props> = ({ children }) => {
     }
   };
 
+  const logout = async () => {
+    await signOut(auth);
+    localStorage.removeItem('@user');
+    setUser({});
+    navigate('/');
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -98,6 +100,7 @@ export const AuthContextProvider: React.FC<Props> = ({ children }) => {
         signIn,
         signUp,
         loadingAuth,
+        logout,
       }}
     >
       {children}
