@@ -7,16 +7,18 @@ import { FiHome, FiUser, FiSettings } from 'react-icons/fi';
 import Cover from '../../assets/cover.png';
 
 const Header = () => {
-  const { user } = useGetUserStorage();
+  const { userStorage } = useGetUserStorage();
   return (
     <Container>
       <div
         className="container-avatar"
         style={{ background: `url(${Cover})`, backgroundSize: 'cover' }}
       >
-        {user !== null && (
+        {userStorage !== null && (
           <img
-            src={user.avatarUrl === null ? Avatar : user.avatarUrl}
+            src={
+              userStorage.avatarUrl === null ? Avatar : userStorage.avatarUrl
+            }
             alt="Foto do usuário"
           />
         )}

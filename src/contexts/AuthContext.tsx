@@ -1,4 +1,4 @@
-import { createContext, useMemo, useState } from 'react';
+import { createContext, useMemo, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { db, auth } from '../services/firebaseConnection';
@@ -100,6 +100,7 @@ export const AuthContextProvider: React.FC<Props> = ({ children }) => {
       signUp,
       loadingAuth,
       logout,
+      setUser,
     }),
     [user, signIn, signUp, loadingAuth, logout]
   );

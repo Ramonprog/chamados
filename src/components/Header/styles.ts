@@ -6,6 +6,7 @@ export const Container = styled.header`
   height: 100%;
   overflow: auto;
   width: 200px;
+  z-index: 999999;
 
   & .container-avatar {
     background-color: #181c2e;
